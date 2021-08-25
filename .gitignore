@@ -13,3 +13,18 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+*config.py
+*.config/
+configs/
+*.log
+*.joblib
+*MACOSX/
+**/__pycache__/
+.DS_Store
+.vscode
+.idea
+graph/
+test/
+tests
+.history/
+**/*.csv
