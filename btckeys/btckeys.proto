@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option go_package = "github.com/Muggle-Du/btckeys/btckeys";
+
+package btckeys;
+
+service BtcKeys {
+    rpc DeriveBech32AddressFromXpub (DerivationRequest) returns (Address) {} 
+
+    rpc GetMultiSigAddress (MultiSigRequest) returns (Address) {}
+}
+
+message MultiSigRequest {
+    repeated string pubkeys = 1;
+    uint64 m = 2;
+    uint64 n = 3;
+}
+
+message DerivationRequest {
+    string xpub = 1;
+    string path = 2;
+}
+
+message Address {
+    string address = 1;
+}
+
