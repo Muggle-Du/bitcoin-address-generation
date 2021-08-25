@@ -25,25 +25,25 @@ type server struct {
 	btckeys.UnimplementedBtcKeysServer
 }
 
-func (s *server) DeriveBech32AddressFromXpub(ctx context.Context, in *btckeys.DerivationRequest) (btckeys.Address, error) {
+func (s *server) DeriveBech32AddressFromXpub(ctx context.Context, in *btckeys.DerivationRequest) (*btckeys.Address, error) {
 	xpub := in.Xpub
 	path := in.Path
 
 	if string(xpub[:4]) == "xprv" {
 		log.Printf("refuse to serve because a xprv is uploaded and this can be dangerous")
-		return btckeys.Address{Address: ""}, ErrInvalidXpub
+		return &btckeys.Address{Address: ""}, ErrInvalidXpub
 	}
 
 	exkey, err := btckeys.NewKeyFromString(xpub)
 	if err != nil {
 		log.Printf("invalid xpub string, error: %v\n", err)
-		return btckeys.Address{Address: ""}, err
+		return &btckeys.Address{Address: ""}, err
 	}
 
 	childExkey, err := exkey.Derive(path)
 	if err != nil {
 		log.Printf("failed to derive from parent extended key, error: %v\n", err)
-		return btckeys.Address{Address: ""}, err
+		return &btckeys.Address{Address: ""}, err
 	}
 
 	bech32Address, err := childExkey.P2WPKHAddress()
@@ -51,27 +51,26 @@ func (s *server) DeriveBech32AddressFromXpub(ctx context.Context, in *btckeys.De
 		log.Printf("failed to generate bech32address, error: %v\n", err)
 	}
 
-	return btckeys.Address{Address: bech32Address}, nil
+	return &btckeys.Address{Address: bech32Address}, nil
 }
 
-/*
-func (s *server) GenerateMultiSigAddress(ctx context.Context, in *btckeys.MultiSigRequest) (btckeys.Address, error) {
+func (s *server) GetMultiSigAddress(ctx context.Context, in *btckeys.MultiSigRequest) (*btckeys.Address, error) {
 	publicKeyStrings := in.Pubkeys
 	for _, publicKeyString := range publicKeyStrings {
 		if btckeys.IsCompressedPublicKeyString(publicKeyString) {
 			log.Printf("want compressed public key")
-			return btckeys.Address{Address: ""}, ErrWantCompressedPubKeys
+			return &btckeys.Address{Address: ""}, ErrWantCompressedPubKeys
 		}
 	}
 
 	multiSigAddress, _, err := btckeys.GenerateMultiSigAddress(publicKeyStrings, int(in.M), int(in.N))
 	if err != nil {
 		log.Printf("failed to generate multisig address, error: %v\n", err)
-		return btckeys.Address{Address: ""}, err
+		return &btckeys.Address{Address: ""}, err
 	}
-	return btckeys.Address{Address: multiSigAddress}, nil
+	return &btckeys.Address{Address: multiSigAddress}, nil
 }
-*/
+
 func main() {
 	lis, err := net.Listen("tcp", port)
 	if err != nil {

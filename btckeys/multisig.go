@@ -17,6 +17,8 @@ var (
 	ErrInvalidPublicKeysNumber = errors.New("wrong number of public keys")
 )
 
+//This will generate bech32 address from compressed pubkeys even if uncompressed pubkeys were provided
+//to shorten the redeemscript length
 func GenerateMultiSigAddress(publicKeyStrings []string, flagM int, flagN int) (multiSigAddress string, redeemScriptString string, err error) {
 	publicKeys := make([][]byte, len(publicKeyStrings))
 	for i, publicKeyString := range publicKeyStrings {
@@ -25,7 +27,7 @@ func GenerateMultiSigAddress(publicKeyStrings []string, flagM int, flagN int) (m
 		if err != nil {
 			return "", "", err
 		}
-		key, err := btcec.ParsePubKey(p, btcec.S256())
+		key, err := btcec.ParsePubKey(p, btcec.S256()) //ParsePubkey will do some validation work and result is uncompressed
 		if err != nil {
 			return "", "", err
 		}

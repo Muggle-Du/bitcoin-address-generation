@@ -28,6 +28,7 @@ var (
 	ErrInvalidPath = errors.New("invalid derivation path")
 )
 
+//Generate ExtendedKet from xpub or xprv string, both allowed
 func NewKeyFromString(xpubOrxprv string) (*ExtendedKey, error) {
 	key, err := hd.NewKeyFromString(xpubOrxprv)
 	if err != nil {
@@ -38,6 +39,7 @@ func NewKeyFromString(xpubOrxprv string) (*ExtendedKey, error) {
 	return exkey, nil
 }
 
+//Generate bech32 address from ExtendedKey
 func (exkey *ExtendedKey) P2WPKHAddress() (address string, err error) {
 	pubkey, _ := exkey.key.ECPubKey()
 	witnessProg := btcutil.Hash160(pubkey.SerializeCompressed())
@@ -49,6 +51,8 @@ func (exkey *ExtendedKey) P2WPKHAddress() (address string, err error) {
 	return address, nil
 }
 
+//Derive method transfers path to indexes and call derive in order to get final child ExtendedKey
+//Hardened derivation in path for xpub will fail.
 func (exkey *ExtendedKey) Derive(path string) (*ExtendedKey, error) {
 	childExkey := &ExtendedKey{}
 
@@ -77,6 +81,7 @@ func (exkey *ExtendedKey) Derive(path string) (*ExtendedKey, error) {
 	return childExkey, nil
 }
 
+//validate path and get index slice from path
 func indexesFromPath(path string) ([]uint32, error) {
 	indexes := []uint32{}
 	rawIndexes := strings.Split(path, "/")
