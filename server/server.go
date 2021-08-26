@@ -56,12 +56,12 @@ func (s *server) DeriveBech32AddressFromXpub(ctx context.Context, in *btckeys.De
 
 func (s *server) GetMultiSigAddress(ctx context.Context, in *btckeys.MultiSigRequest) (*btckeys.Address, error) {
 	publicKeyStrings := in.Pubkeys
-	for _, publicKeyString := range publicKeyStrings {
+	/*for _, publicKeyString := range publicKeyStrings {
 		if btckeys.IsCompressedPublicKeyString(publicKeyString) {
 			log.Printf("want compressed public key")
 			return &btckeys.Address{Address: ""}, ErrWantCompressedPubKeys
 		}
-	}
+	}*/ // not necessary
 
 	multiSigAddress, _, err := btckeys.GenerateMultiSigAddress(publicKeyStrings, int(in.M), int(in.N))
 	if err != nil {
