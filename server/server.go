@@ -29,8 +29,10 @@ func (s *server) DeriveBech32AddressFromXpub(ctx context.Context, in *btckeys.De
 	xpub := in.Xpub
 	path := in.Path
 
+	log.Printf("receive bech32 child wallet address request, xpub:%v, path:%v\n", xpub, path)
+
 	if string(xpub[:4]) == "xprv" {
-		log.Printf("refuse to serve because a xprv is uploaded and this can be dangerous")
+		log.Printf("refuse to serve because a xprv is uploaded and this can be dangerous\n")
 		return &btckeys.Address{Address: ""}, ErrInvalidXpub
 	}
 
@@ -63,6 +65,8 @@ func (s *server) GetMultiSigAddress(ctx context.Context, in *btckeys.MultiSigReq
 		}
 	}*/ // not necessary
 
+	log.Printf("receive multisig address generation request,m: %v, n: %v\n", in.M, in.N)
+
 	multiSigAddress, _, err := btckeys.GenerateMultiSigAddress(publicKeyStrings, int(in.M), int(in.N))
 	if err != nil {
 		log.Printf("failed to generate multisig address, error: %v\n", err)
@@ -74,12 +78,12 @@ func (s *server) GetMultiSigAddress(ctx context.Context, in *btckeys.MultiSigReq
 func main() {
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Fatalf("failed to listen: %v\n", err)
 	}
 	s := grpc.NewServer()
 	btckeys.RegisterBtcKeysServer(s, &server{})
-	log.Printf("server listening at %v", lis.Addr())
+	log.Printf("server listening at %v\n", lis.Addr())
 	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		log.Fatalf("failed to serve: %v\n", err)
 	}
 }
