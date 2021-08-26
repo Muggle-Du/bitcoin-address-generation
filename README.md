@@ -34,5 +34,5 @@ to server so that generate a BIP84 address.
 For the compressed public keys, the m and n limit is 15-15, which changes to 7-7 when it comes to the uncompressed public
 keys. Besides, with the same m and n value, compressed public keys make the redeem script shorter.
 
-This server will automatically use compressed public key strings to generate multisig address even if users uploaded 
-uncompressed public key strings.
+This server will automatically use compressed public key strings to generate multisig address and the corresponding redeem 
+script even if users uploaded uncompressed public key strings.
