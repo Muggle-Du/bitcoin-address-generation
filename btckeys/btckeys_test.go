@@ -47,10 +47,13 @@ func Test_derive(t *testing.T) {
 }
 
 func Test_multisig(t *testing.T) {
+	expectedAddress := "3CY2p4b8dKVdjoqqcscxTABYsNQViNybNp"
+	expectedRedeemScript := "5221034f355bdcb7cc0af728ef3cceb9615d90684bb5b2ca5f859ab0f0b704075871aa2102ed83704c95d829046f1ac27806211132102c34e9ac7ffa1b71110658e5b9d1bd21032596957532fc37e40486b910802ff45eeaa924548c0e1c080ef804e523ec3ed353ae"
+
 	publicKeyStrings := make([]string, 3)
-	publicKeyStrings[0] = "04a882d414e478039cd5b52a92ffb13dd5e6bd4515497439dffd691a0f12af9575fa349b5694ed3155b136f09e63975a1700c9f4d4df849323dac06cf3bd6458cd"
-	publicKeyStrings[1] = "046ce31db9bdd543e72fe3039a1f1c047dab87037c36a669ff90e28da1848f640de68c2fe913d363a51154a0c62d7adea1b822d05035077418267b1a1379790187"
-	publicKeyStrings[2] = "0411ffd36c70776538d079fbae117dc38effafb33304af83ce4894589747aee1ef992f63280567f52f5ba870678b4ab4ff6c8ea600bd217870a8b4f1f09f3a8e83"
+	publicKeyStrings[0] = "034f355bdcb7cc0af728ef3cceb9615d90684bb5b2ca5f859ab0f0b704075871aa"
+	publicKeyStrings[1] = "02ed83704c95d829046f1ac27806211132102c34e9ac7ffa1b71110658e5b9d1bd"
+	publicKeyStrings[2] = "032596957532fc37e40486b910802ff45eeaa924548c0e1c080ef804e523ec3ed3"
 	for i, p := range publicKeyStrings {
 		if IsCompressedPublicKeyString(p) {
 			t.Logf("string %v is compressed\n", i)
@@ -61,6 +64,12 @@ func Test_multisig(t *testing.T) {
 	multisigAddress, redeemScriptString, err := GenerateMultiSigAddress(publicKeyStrings, 2, 3)
 	if err != nil {
 		t.Logf("multisig error: %v\n", err)
+	} else {
+		t.Logf("multisig address: %v\nreedeemScriptString: %v\n", multisigAddress, redeemScriptString)
+		if multisigAddress == expectedAddress && redeemScriptString == expectedRedeemScript {
+			t.Logf("allright as expected")
+		} else {
+			t.Logf("ERROR: not as expected")
+		}
 	}
-	t.Logf("multisig address: %v\nreedeemScriptString: %v\n", multisigAddress, redeemScriptString)
 }
