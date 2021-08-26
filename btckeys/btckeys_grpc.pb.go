@@ -19,7 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BtcKeysClient interface {
 	DeriveBech32AddressFromXpub(ctx context.Context, in *DerivationRequest, opts ...grpc.CallOption) (*Address, error)
-	GetMultiSigAddress(ctx context.Context, in *MultiSigRequest, opts ...grpc.CallOption) (*Address, error)
+	GetMultiSigAddress(ctx context.Context, in *MultiSigRequest, opts ...grpc.CallOption) (*MultiSigResponse, error)
 }
 
 type btcKeysClient struct {
@@ -39,8 +39,8 @@ func (c *btcKeysClient) DeriveBech32AddressFromXpub(ctx context.Context, in *Der
 	return out, nil
 }
 
-func (c *btcKeysClient) GetMultiSigAddress(ctx context.Context, in *MultiSigRequest, opts ...grpc.CallOption) (*Address, error) {
-	out := new(Address)
+func (c *btcKeysClient) GetMultiSigAddress(ctx context.Context, in *MultiSigRequest, opts ...grpc.CallOption) (*MultiSigResponse, error) {
+	out := new(MultiSigResponse)
 	err := c.cc.Invoke(ctx, "/btckeys.BtcKeys/GetMultiSigAddress", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -53,7 +53,7 @@ func (c *btcKeysClient) GetMultiSigAddress(ctx context.Context, in *MultiSigRequ
 // for forward compatibility
 type BtcKeysServer interface {
 	DeriveBech32AddressFromXpub(context.Context, *DerivationRequest) (*Address, error)
-	GetMultiSigAddress(context.Context, *MultiSigRequest) (*Address, error)
+	GetMultiSigAddress(context.Context, *MultiSigRequest) (*MultiSigResponse, error)
 	mustEmbedUnimplementedBtcKeysServer()
 }
 
@@ -64,7 +64,7 @@ type UnimplementedBtcKeysServer struct {
 func (UnimplementedBtcKeysServer) DeriveBech32AddressFromXpub(context.Context, *DerivationRequest) (*Address, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeriveBech32AddressFromXpub not implemented")
 }
-func (UnimplementedBtcKeysServer) GetMultiSigAddress(context.Context, *MultiSigRequest) (*Address, error) {
+func (UnimplementedBtcKeysServer) GetMultiSigAddress(context.Context, *MultiSigRequest) (*MultiSigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMultiSigAddress not implemented")
 }
 func (UnimplementedBtcKeysServer) mustEmbedUnimplementedBtcKeysServer() {}

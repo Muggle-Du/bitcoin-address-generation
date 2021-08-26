@@ -56,7 +56,7 @@ func (s *server) DeriveBech32AddressFromXpub(ctx context.Context, in *btckeys.De
 	return &btckeys.Address{Address: bech32Address}, nil
 }
 
-func (s *server) GetMultiSigAddress(ctx context.Context, in *btckeys.MultiSigRequest) (*btckeys.Address, error) {
+func (s *server) GetMultiSigAddress(ctx context.Context, in *btckeys.MultiSigRequest) (*btckeys.MultiSigResponse, error) {
 	publicKeyStrings := in.Pubkeys
 	/*for _, publicKeyString := range publicKeyStrings {
 		if btckeys.IsCompressedPublicKeyString(publicKeyString) {
@@ -67,12 +67,14 @@ func (s *server) GetMultiSigAddress(ctx context.Context, in *btckeys.MultiSigReq
 
 	log.Printf("receive multisig address generation request,m: %v, n: %v\n", in.M, in.N)
 
-	multiSigAddress, _, err := btckeys.GenerateMultiSigAddress(publicKeyStrings, int(in.M), int(in.N))
+	multiSigAddress, redeemScript, err := btckeys.GenerateMultiSigAddress(publicKeyStrings, int(in.M), int(in.N))
 	if err != nil {
 		log.Printf("failed to generate multisig address, error: %v\n", err)
-		return &btckeys.Address{Address: ""}, err
+		return &btckeys.MultiSigResponse{Address: "", Redeemscript: ""}, err
 	}
-	return &btckeys.Address{Address: multiSigAddress}, nil
+
+	//return both multisig address and the redeem script
+	return &btckeys.MultiSigResponse{Address: multiSigAddress, Redeemscript: redeemScript}, nil
 }
 
 func main() {

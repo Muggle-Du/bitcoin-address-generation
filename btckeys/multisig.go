@@ -21,6 +21,7 @@ var (
 //to shorten the redeemscript length
 func GenerateMultiSigAddress(publicKeyStrings []string, flagM int, flagN int) (multiSigAddress string, redeemScriptString string, err error) {
 	publicKeys := make([][]byte, len(publicKeyStrings))
+
 	for i, publicKeyString := range publicKeyStrings {
 		publicKeyString = strings.TrimSpace(publicKeyString)
 		p, err := hex.DecodeString(publicKeyString)

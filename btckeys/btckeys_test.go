@@ -1,8 +1,6 @@
 package btckeys
 
 import (
-	//"github.com/btcsuite/btcutil/bech32"
-	//"fmt"
 	"testing"
 
 	"github.com/btcsuite/btcd/chaincfg"

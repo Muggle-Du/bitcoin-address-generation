@@ -7,13 +7,18 @@ package btckeys;
 service BtcKeys {
     rpc DeriveBech32AddressFromXpub (DerivationRequest) returns (Address) {} 
 
-    rpc GetMultiSigAddress (MultiSigRequest) returns (Address) {}
+    rpc GetMultiSigAddress (MultiSigRequest) returns (MultiSigResponse) {}
 }
 
 message MultiSigRequest {
     repeated string pubkeys = 1;
     uint64 m = 2;
     uint64 n = 3;
+}
+
+message MultiSigResponse {
+    string address = 1;
+    string redeemscript = 2;
 }
 
 message DerivationRequest {
