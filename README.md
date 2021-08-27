@@ -20,7 +20,7 @@ if there is a hardened index in the path, in other words hardened derivation is 
 
 As a server that serve the users to generate child hd wallets, to avoid the vulerable architecture that allows the 
 users to upload private keys to the server, this server allows only derivation from parent public keys. (to check the
-the vulnerability that allowing users to upload private keys to server has brought, refer to [this](https://www.blackhat.com/us-21/briefings/schedule/#how-i-used-a-json-deserialization-day-to-steal-your-money-on-the-blockchain-22815))
+vulnerability that allowing users to upload private keys to server has brought, refer to [this](https://www.blackhat.com/us-21/briefings/schedule/#how-i-used-a-json-deserialization-day-to-steal-your-money-on-the-blockchain-22815))
 
 Actually, to generate child hd wallet address, you need an extended key rather than an ordinary key. which contains
 more information besides the original key. 
@@ -28,7 +28,7 @@ more information besides the original key.
 
 If users want to generate a bech32 hd wallet address that conforms to BIP84, the user should first perform hardened 
 derivation for the master xprv with path "m/84'/0'/0'" to get child xpub and then post child xpub and path like "0/0"
-to server so that generate a BIP84 address.
+to server so that the user can generate a BIP84 address.
 
 ## MultiSig Address Generation
 For the compressed public keys, the m and n limit is 15-15, which changes to 7-7 when it comes to the uncompressed public

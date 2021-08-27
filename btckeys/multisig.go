@@ -17,7 +17,7 @@ var (
 	ErrInvalidPublicKeysNumber = errors.New("wrong number of public keys")
 )
 
-//This will generate bech32 address from compressed pubkeys even if uncompressed pubkeys were provided
+//This will generate P2SH multisig address from compressed pubkeys even if uncompressed pubkeys were provided
 //to shorten the redeemscript length
 func GenerateMultiSigAddress(publicKeyStrings []string, flagM int, flagN int) (multiSigAddress string, redeemScriptString string, err error) {
 	publicKeys := make([][]byte, len(publicKeyStrings))
